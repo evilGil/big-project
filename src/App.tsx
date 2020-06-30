@@ -1,24 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [message, setMessage] = useState('');
+  const [items, setItems] = useState('');
+
+  const onGetMessageClick = () => {
+    fetch('http://localhost:5000')
+      .then(response => response.text())
+      .then(data => setMessage(data));
+  }
+
+  const onGetItemsClick = async () => {
+    const res = await fetch('http://localhost:5000/item');
+    const data = await res.text();
+    setItems(data);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>
+        <button onClick={onGetMessageClick}>send message2</button>
+        {message}
+      </div>
+      <div>
+        <button onClick={onGetItemsClick}>get items</button>
+        {items}
+      </div>
     </div>
   );
 }
